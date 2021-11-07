@@ -16,7 +16,7 @@ def load_covid(period=None): # 도별 확진환자수 데이터 로드
         print(period)
         return df_covid[period[0]]
     else:
-        tmp_df = df_covid.loc[:,period[0]:period[1]]
+        tmp_df = df_covid.loc[:, period[0]:period[1]]
         tmp_df['기간 총합'] = tmp_df.sum(axis=1) # Warning 확인해볼 필요가 있음
         return tmp_df
 
@@ -36,4 +36,29 @@ def load_hospital(): # 도별 병원수 데이터 로드
     df_hospital = df_hospital.rename(index=name_match)
 
     return df_hospital
+
+
+def load_nurse(period, option=None): # 간호인력 데이터 로드 분기별로, 옵션은 시도별로 묶어서 보여줄지 여부
+    missing_values = ['--', '-', 'na']
+
+    year, quarter  = period.split("-")
+    dir = './resource/의료인력_간호사/' + year + '년' + quarter + '분기.csv' # 입력값에 맞는 분기의 csv 파일 로드
+    df_nurse = pd.read_csv(dir, na_values=missing_values, index_col='시도')
+
+    hospital_or_public_health = df_nurse['요양기관종별'].str.contains('상급종합병원|종합병원|보건소') #해당하는 문자열 있는지 판단
+    # 병원을 포함하는 단어가 요양병원, 치과병원 등도 있어서 병원은 따로 체크함
+    df_nurse = df_nurse[['요양기관종별','간호사','간호조무사']][hospital_or_public_health | (df_nurse['요양기관종별']=='병원')]
+
+    df_nurse = df_nurse.fillna("0") # 아래에서 문자열 치환하기 위해서 임시로 nan부분도 문자열 0으로 바꿔놓음
+    #숫자가 있는 부분부터만 모두 숫자로 바꿈
+    df_nurse.iloc[:,1:] = df_nurse.iloc[:,1:].apply(lambda x: x.apply(lambda y: y.replace(",", ""))).astype(np.int64)
+
+
+    if option == '시도별' : # 시도별로 묶여있는 데이터 만듦
+        df_nurse = df_nurse.groupby('시도').agg(sum).reset_index().set_index('시도') #시도별 총 간호사, 간호조무사 데이터
+        df_nurse['합계'] = df_nurse.sum(axis=1, numeric_only=True)
+    else:
+        df_nurse['합계'] = df_nurse.sum(axis=1, numeric_only=True)
+
+    return df_nurse
 
