@@ -11,6 +11,7 @@ def main():
     ## 전체 데이터 가져올때
     print('1')
     df_covid = load_covid()
+    print(df_covid)
     plt.bar(df_covid.index[1:], df_covid['누적(명)'][1:], align='center')
     plt.show()
 
