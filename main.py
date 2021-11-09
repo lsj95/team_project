@@ -1,6 +1,8 @@
 import font_init
 import matplotlib.pyplot as plt
+# 여기서 부터는 직접 만든 모듈들 임포트
 from load_data import load_covid, load_hospital, load_nurse
+from user_func import *
 
 
 def main():
@@ -39,6 +41,12 @@ def main():
     ## 간호사 데이터 가져오기 case 2
     df_nurse = load_nurse('2019-1','시도별')
     print(df_nurse)
+
+
+    print('7')
+    ## 간호사 데이터 분기별 변화율 확인
+    df_nurse_diff = nurse_diff(['2019-1', '2021-3'])
+    print(df_nurse_diff[df_nurse_diff['간호사 변화율'] >= 0.2])
 
 
 main()
