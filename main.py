@@ -43,11 +43,20 @@ def main():
     # print(df_nurse)
 
 
-    print('7')
-    ## 간호사 데이터 분기별 변화율 확인
-    df_nurse_diff = nurse_diff(['2019-1', '2021-3'])
-    print(df_nurse_diff)
-    print(df_nurse_diff[df_nurse_diff['지역 총 변화율'] >= 0.2])
+    # print('7')
+    # ## 간호사 데이터 분기별 변화율 확인
+    # df_nurse_diff = nurse_diff(['2019-1', '2021-3'])
+    # print(df_nurse_diff)
+    # print(df_nurse_diff[df_nurse_diff['지역 총 변화율'] >= 0.2])
+
+
+    print('8')
+    ## 병상수 증가량 체크 8월과 11월 데이터 2개의 차이 체크
+    print('8월 병상수\n', load_hospital_bed(0))
+    print('11월 병상수\n', load_hospital_bed(1))
+    print('8->11월 병상수 변화\n', hospital_bed_diff())
+
+
 
 
 main()

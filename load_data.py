@@ -62,3 +62,16 @@ def load_nurse(period, option=None): # 간호인력 데이터 로드 분기별�
 
     return df_nurse
 
+
+def load_hospital_bed(select): # 데이터 어짜피 2개뿐이라 0 or 1로 필요한 데이터 리턴
+    missing_values = ['--', '-',' - ' 'na']  # nan값 설정
+
+    if select == 0:
+        df_hospital_bed = pd.read_csv('resource/격리병실 관련자료/지역_종류별_보유_병상과_가용_병상(8월 기준).csv', na_values=missing_values)
+    elif select == 1:
+        df_hospital_bed = pd.read_csv('resource/격리병실 관련자료/지역_종류별_보유_병상과_가용_병상(11월 기준).csv', na_values=missing_values)
+
+    df_hospital_bed.fillna(0, inplace=True)
+    df_hospital_bed.iloc[:, 2:] = df_hospital_bed.iloc[:, 2:].astype(np.int64)
+
+    return df_hospital_bed
