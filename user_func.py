@@ -1,3 +1,4 @@
+#-*-coding:utf-8-*-
 import numpy as np
 import pandas as pd
 from load_data import load_nurse, load_hospital_bed

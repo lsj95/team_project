@@ -1,7 +1,8 @@
+#-*-coding:utf-8-*-
 import font_init
 import matplotlib.pyplot as plt
 # 여기서 부터는 직접 만든 모듈들 임포트
-from load_data import load_covid, load_hospital, load_nurse
+from load_data import *
 from user_func import *
 
 def main():
@@ -54,6 +55,10 @@ def main():
     print('8월 병상수\n', load_hospital_bed(0))
     print('11월 병상수\n', load_hospital_bed(1))
     print('8->11월 병상수 변화\n', hospital_bed_diff())
+
+
+    print('9')
+    print('코로나 api로 불러온 데이터\n', load_covid_api(['2021.11.13']))
 
 
 

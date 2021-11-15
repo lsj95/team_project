@@ -1,5 +1,9 @@
+#-*-coding:utf-8-*-
 import pandas as pd
 import numpy as np
+import requests
+import json
+import xmltodict
 
 
 def load_covid(period=None): # 도별 확진환자수 데이터 로드
@@ -75,3 +79,34 @@ def load_hospital_bed(select): # 데이터 어짜피 2개뿐이라 0 or 1로 필
     df_hospital_bed.iloc[:, 2:] = df_hospital_bed.iloc[:, 2:].astype(np.int64)
 
     return df_hospital_bed
+
+
+
+# 아직은 날짜 하루밖에 못보게 만들었음, 필요하면 기간에 대해서 뽑을수 있도록 할 예정
+def load_covid_api(period):  # ['2021.10.11']
+
+    if len(period) == 1:
+        period += period  # 리스트끼리 더함 시작날짜와 종료날짜 필요해서
+
+    period[0] = period[0].replace('.', '')
+    period[1] = period[1].replace('.', '')
+
+    key_decoding = 'saEBBtfCp5LEcTo0MsOzAk+F1mVEm/STDsIdGUSMemDDmzhaAT1IH0z8xurajnfPo3zMlnyeJhjiADX2B4s70g=='
+
+    url = 'http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson'
+    params = {'serviceKey': key_decoding, 'pageNo': '1', 'numOfRows': '1', 'startCreateDt': period[0],
+              'endCreateDt': period[1]}
+
+    response = requests.get(url, params=params)
+    data = xmltodict.parse(response.content)
+
+    df = pd.DataFrame(data['response']['body']['items']['item'])
+
+    df.rename(columns={'gubun': '구분', 'deathCnt': '사망자 수', 'defCnt': '확진자 수', 'incDec': '전일대비 증감 수',
+                       'isolIngCnt': '격리중 환자수', 'isolClearCnt': '격리 해제 수', 'qurRate': '10만명당 발생률',
+                       'localOccCnt': '지역발생 수',
+                       'overFlowCnt': '해외유입 수'}, inplace=True)
+    df.index = df['구분']
+    df = df.drop(['구분', 'createDt', 'gubunCn', 'gubunEn', 'seq', 'stdDay', 'updateDt'], axis=1)  # 필요없는거 드랍
+
+    return df
