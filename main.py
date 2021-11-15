@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 from load_data import load_covid, load_hospital, load_nurse
 from user_func import *
 
-
 def main():
 
     # 그냥 임시로 만든 함수들 적어놓음
