@@ -110,3 +110,10 @@ def load_covid_api(period):  # ['2021.10.11']
     df = df.drop(['구분', 'createDt', 'gubunCn', 'gubunEn', 'seq', 'stdDay', 'updateDt'], axis=1)  # 필요없는거 드랍
 
     return df
+
+
+def load_population(): # 인구 통계 csv 로드
+    df_population = pd.read_csv('./resource/인구.csv',index_col = '지역명',encoding='cp949').drop(['전국'])
+    #csv 파일을 만들 떄 전국 명을 표기해 두었는데, 다른 자료에서는 없는 것 같아서 drop 시킴.
+    
+    return df_population
