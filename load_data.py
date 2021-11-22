@@ -4,6 +4,7 @@ import numpy as np
 import requests
 import json
 import xmltodict
+import platform
 
 
 def load_covid(period=None): # 도별 확진환자수 데이터 로드
@@ -113,7 +114,11 @@ def load_covid_api(period):  # ['2021.10.11']
 
 
 def load_population(): # 인구 통계 csv 로드
-    df_population = pd.read_csv('./resource/인구.csv',index_col = '지역명',encoding='cp949').drop(['전국'])
-    #csv 파일을 만들 떄 전국 명을 표기해 두었는데, 다른 자료에서는 없는 것 같아서 drop 시킴.
+
+    # csv 파일을 만들 떄 전국 명을 표기해 두었는데, 다른 자료에서는 없는 것 같아서 drop 시킴.
+    if platform.system() == 'Darwin':
+        df_population = pd.read_csv('./resource/인구.csv', index_col='지역명').drop(['전국'])
+    elif platform.system() == 'Windows':
+        df_population = pd.read_csv('./resource/인구.csv',index_col = '지역명',encoding='cp949').drop(['전국'])
     
     return df_population
