@@ -32,3 +32,14 @@ def hospital_bed_diff(): #8월 병상수 -> 11월 병상수 변화량 구하는 
     df_hospital_bed_diff = pd.concat([columns_1_2,hospital_bed_diff], axis=1)
 
     return df_hospital_bed_diff #최종적으로 8월에서 10월 병상수 변화량을 보여줌
+
+def sort_region(df): # 데이터 프레임 입력 받아서 정해진 index로 순서 맞춰서 리턴
+
+    regions = ['서울', '부산', '대구', '인천', '광주', '대전', '울산', '세종', '경기',
+               '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주']
+    if len(df) > 17: # 그냥 지역명만 있으면 17이고, 검역까지 있으면 18임
+        regions.append('검역')
+
+    sorted_df = df.reindex(index=regions)
+    
+    return sorted_df
