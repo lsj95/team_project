@@ -41,5 +41,5 @@ def sort_region(df): # 데이터 프레임 입력 받아서 정해진 index로 �
         regions.append('검역')
 
     sorted_df = df.reindex(index=regions)
-    
+
     return sorted_df
