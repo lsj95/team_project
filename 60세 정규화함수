@@ -1,0 +1,29 @@
+import csv
+import pandas as pd
+
+
+def Nomalization():
+    name = pd.read_excel("C:/Users/User/Downloads/file.xlsx",header = 3,usecols='B',thousands = ',')
+    f = pd.read_excel("C:/Users/User/Downloads/file.xlsx",header = 3,usecols='E:J',thousands = ',')
+    f2 = pd.read_excel("C:/Users/User/Downloads/file.xlsx",header = 3,usecols='K:O',thousands = ',')
+    country = pd.read_excel("C:/Users/User/Downloads/file.xlsx",header = 3,usecols='C',thousands = ',')
+    name_list = name.values
+    c=[]
+    for name in name_list:
+        name = str(name)
+        val = name.replace(' ','').replace('[','').replace(']','').replace('\'','')
+        
+        c.append(val)
+    df_sum = list(f.sum(axis=1).values)
+    df2_sum = list(f2.sum(axis=1).values)
+    con= list(country.sum(axis=1).values)
+
+    result=[]
+    for i in range(len(con)):
+        val = (round(df_sum[i]/con[i],3),round(df2_sum[i]/con[i],3))
+        str_ = c[i]+str(val)
+        print(str_)
+        #result.append(str_)
+        
+    
+Nomalization()
